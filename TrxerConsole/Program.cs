@@ -33,7 +33,7 @@ namespace TrxerConsole
             target = new FileTarget();
 
             target.Layout = "${longdate} ${logger} ${message}";
-            target.FileName = "${basedir}/${shortdate}/${windows-identity:domain=false}.${level}.log";
+            target.FileName = "${basedir}/${shortdate}/logfile.${level}.log";
             target.KeepFileOpen = false;
             target.Encoding = Encoding.UTF8;
 
