@@ -1,7 +1,11 @@
-﻿using System;
+﻿
+using NLog;
+using NLog.Targets;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Xsl;
 
@@ -18,19 +22,38 @@ namespace TrxerConsole
         /// </summary>
         private const string OUTPUT_FILE_EXT = ".html";
 
+        private static FileTarget target;
+
         /// <summary>
         /// Main entry of TrxerConsole
         /// </summary>
         /// <param name="args">First cell shoud be TRX path</param>
         static void Main(string[] args)
         {
+            target = new FileTarget();
+
+            target.Layout = "${longdate} ${logger} ${message}";
+            target.FileName = "${basedir}/${shortdate}/${windows-identity:domain=false}.${level}.log";
+            target.KeepFileOpen = false;
+            target.Encoding = Encoding.UTF8;
+
+            NLog.Config.SimpleConfigurator.ConfigureForTargetLogging(target, LogLevel.Debug);
+
             if (args.Any() == false)
             {
                 Console.WriteLine("No trx file,  Trxer.exe <filename>");
                 return;
             }
-            Console.WriteLine("Trx File\n{0}", args[0]);
-            Transform(args[0], PrepareXsl());
+            try
+            {
+                Console.WriteLine("Trx File\n{0}", args[0]);
+                Transform(args[0], PrepareXsl());
+            }
+            catch (Exception e)
+            {
+                var logger = LogManager.GetLogger("TrxerConsole");
+                logger.Debug($"{e}");
+            }
         }
 
         /// <summary>
