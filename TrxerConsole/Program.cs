@@ -68,6 +68,8 @@ namespace TrxerConsole
             Console.WriteLine("Transforming...");
             x.Transform(fileName, fileName + OUTPUT_FILE_EXT);
             Console.WriteLine("Done transforming xml into html");
+            var logger = LogManager.GetLogger("TrxerConsole");
+            logger.Info("Done transforming xml into html");
         }
 
         /// <summary>
