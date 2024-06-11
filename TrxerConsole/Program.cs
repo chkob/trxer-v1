@@ -37,7 +37,7 @@ namespace TrxerConsole
             target.KeepFileOpen = false;
             target.Encoding = Encoding.UTF8;
 
-            NLog.Config.SimpleConfigurator.ConfigureForTargetLogging(target, LogLevel.Debug);
+            LogManager.Setup().LoadConfiguration(c => c.ForLogger(LogLevel.Debug).WriteTo(target));
 
             if (args.Any() == false)
             {
